@@ -14,3 +14,31 @@ class Topic(models.Model):
         """ Devolve uma representação em string do modelo. """
 
         return self.text
+    
+
+class Entry(models.Model):
+    """ Algo específico aprendido sobre um assunto. """
+    
+    # referência a outro registro do banco de dados
+    # associa cada entrada a um assunto em específico
+    # cada assunto recebe uma chave, um ID. Sendo este dado a conexão entre os BD's
+    # precisei adicionar on_delete pois trata-se de uma versão nova do Django 2.0 
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
+
+    # não se quer restringir a quantiade de caracter
+    text = models.TextField()
+
+    # apresenta em ordem que foram criadas e inserem um timestamp junto a cada entrada
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    # precisa estar dentro de Entry
+    class Meta:
+        """ Armazena as informações extras para adminstrar um modelo. """
+
+        # quando fro se referir a mais de uma entrada utilizar entries ao invés de Entrys
+        verbose_name_plural = 'entries'
+
+    def __str__(self):
+        """ Devolve uma representação em string do modelo. """
+        
+        return self.text[:50] + "..."
