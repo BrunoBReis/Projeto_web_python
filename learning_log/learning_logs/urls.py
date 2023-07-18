@@ -6,4 +6,6 @@ from . import views
 urlpatterns = [
     # página inicial 
     path('', views.index, name='index'),
+    # mostra todos os assuntos
+    path('topics/', views.topics, name='topics'),
 ]
