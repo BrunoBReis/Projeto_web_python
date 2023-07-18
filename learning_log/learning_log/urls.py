@@ -19,5 +19,6 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # adicioando a URL específica 
     path('', include('learning_logs.urls')),
 ]
