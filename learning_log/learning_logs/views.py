@@ -10,7 +10,7 @@ def topics(request):
     """ Mostra todos os tópicos. """
 
     # consulta-se o  banco de dados pedindo os objetos de Topic, ordenados com o atributo date_added
-    topics = Topic.objects.filter(owner=request.user).order_by('date_added')
+    topics = Topic.objects.order_by('date_added')
 
     # contexto que será enviado ao template
     context = {'topics': topics}
