@@ -16,7 +16,7 @@ def topics(request):
     """ Mostra todos os tópicos. """
 
     # consulta-se o  banco de dados pedindo os objetos de Topic, ordenados com o atributo date_added
-    topics = Topic.objects.order_by('date_added')
+    topics = Topic.objects.filter(owner=request.user).order_by('date_added')
 
     # contexto que será enviado ao template
     context = {'topics': topics}
@@ -28,6 +28,10 @@ def topic(request, topic_id):
 
     # topic armazena o assunto .get()
     topic = Topic.objects.get(id=topic_id)
+
+    # garante que o assunto pertence ao usuário atual
+    if not topic.public:
+        check_topic_owner(topic, request)
 
     # os assuntos são recuperados e organizados
     entries = topic.entry_set.order_by('-date_added')
@@ -91,6 +95,8 @@ def edit_entry(request, entry_id):
     entry = Entry.objects.get(id=entry_id)
     topic = entry.topic
 
+    check_topic_owner(topic, request)
+
     if request.method != 'POST':
 
         # requisição inicial; preenche previamente o formulário com a entrada atual
@@ -106,3 +112,9 @@ def edit_entry(request, entry_id):
 
     context = {'entry': entry, 'topic': topic, 'form': form}
     return render(request, 'learning_logs/edit_entry.html', context)
+
+def check_topic_owner(topic, request):
+    """ Verifica se o tópico corresponde ao usuário atual. """
+    
+    if topic.owner != request.user:
+        raise Http404
