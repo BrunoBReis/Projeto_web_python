@@ -1,5 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.http import Http404
+
 from .models import Topic
+from .forms import TopicForm
 
 def index(request):
     """ A página inicial de Learning Log. """
@@ -28,3 +32,24 @@ def topic(request, topic_id):
     # os assuntos são armazenados dentro do dicionário para o html
     context = {'topic': topic, 'entries': entries}
     return render(request, 'learning_logs/topic.html', context)
+
+def new_topic(request):
+    """ Adiciona um novo assunto. """
+
+    if request.method != 'POST':
+
+        # nenhum dado submetido; cria um formulário em branco
+        form = TopicForm()
+    else:
+        
+        # dados do POST submetidos; processa os dados
+        form = TopicForm(data=request.POST)
+        if form.is_valid():
+            new_topic = form.save(commit=False)
+            new_topic.owner = request.user
+            new_topic.save()
+            return redirect('learning_logs:topics')
+
+    # Display a blank or invalid form.
+    context = {'form': form}
+    return render(request, 'learning_logs/new_topic.html', context)
