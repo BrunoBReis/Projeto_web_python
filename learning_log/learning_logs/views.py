@@ -5,11 +5,13 @@ from django.http import Http404
 from .models import Topic, Entry
 from .forms import TopicForm, EntryForm
 
+
 def index(request):
     """ A página inicial de Learning Log. """
 
     return render(request, 'learning_logs/index.html')
 
+@login_required
 def topics(request):
     """ Mostra todos os tópicos. """
 
@@ -20,6 +22,7 @@ def topics(request):
     context = {'topics': topics}
     return render(request, 'learning_logs/topics.html', context)
 
+@login_required
 def topic(request, topic_id):
     """ Mostra um único assunto e todas as suas entradas. """
 
@@ -33,7 +36,7 @@ def topic(request, topic_id):
     context = {'topic': topic, 'entries': entries}
     return render(request, 'learning_logs/topic.html', context)
 
-
+@login_required
 def new_topic(request):
     """ Adiciona um novo assunto. """
 
@@ -56,7 +59,7 @@ def new_topic(request):
     context = {'form': form}
     return render(request, 'learning_logs/new_topic.html', context)
 
-
+@login_required
 def new_entry(request, topic_id):
     """ Acrescenta uma nova entrada para um assunto em particular. """
     
@@ -81,7 +84,7 @@ def new_entry(request, topic_id):
     context = {'topic': topic, 'form': form}
     return render(request, 'learning_logs/new_entry.html', context)
 
-
+@login_required
 def edit_entry(request, entry_id):
     """ Edita uma entrada existente. """
 

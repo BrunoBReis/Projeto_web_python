@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Topic(models.Model):
@@ -9,6 +10,9 @@ class Topic(models.Model):
     
     # registrará a data e hora 
     date_added = models.DateTimeField(auto_now_add=True)
+
+    # relação entre user e cahve estrangeira 
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         """ Devolve uma representação em string do modelo. """

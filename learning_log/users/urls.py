@@ -9,4 +9,6 @@ app_name = 'users'
 urlpatterns = [
     # login quanto logout estão aqui 
     path('', include('django.contrib.auth.urls')),
+    # página de cadastro
+    path('register/', views.register, name='register'), 
 ]
