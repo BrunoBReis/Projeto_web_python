@@ -15,3 +15,16 @@ def topics(request):
     # contexto que será enviado ao template
     context = {'topics': topics}
     return render(request, 'learning_logs/topics.html', context)
+
+def topic(request, topic_id):
+    """ Mostra um único assunto e todas as suas entradas. """
+
+    # topic armazena o assunto .get()
+    topic = Topic.objects.get(id=topic_id)
+
+    # os assuntos são recuperados e organizados
+    entries = topic.entry_set.order_by('-date_added')
+
+    # os assuntos são armazenados dentro do dicionário para o html
+    context = {'topic': topic, 'entries': entries}
+    return render(request, 'learning_logs/topic.html', context)
