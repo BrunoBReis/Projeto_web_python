@@ -19,6 +19,8 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # adicionando o user
+    path('users/', include('users.urls')),
     # adicioando a URL específica 
     path('', include('learning_logs.urls')),
 ]
