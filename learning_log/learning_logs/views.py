@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404
 
 from .models import Topic
-from .forms import TopicForm
+from .forms import TopicForm, EntryForm
 
 def index(request):
     """ A página inicial de Learning Log. """
@@ -33,6 +33,7 @@ def topic(request, topic_id):
     context = {'topic': topic, 'entries': entries}
     return render(request, 'learning_logs/topic.html', context)
 
+
 def new_topic(request):
     """ Adiciona um novo assunto. """
 
@@ -50,6 +51,31 @@ def new_topic(request):
             new_topic.save()
             return redirect('learning_logs:topics')
 
-    # Display a blank or invalid form.
+    # exibir um formulário em branco ou inválido
     context = {'form': form}
     return render(request, 'learning_logs/new_topic.html', context)
+
+
+def new_entry(request, topic_id):
+    """ Acrescenta uma nova entrada para um assunto em particular. """
+    
+    topic = Topic.objects.get(id=topic_id)
+
+    if request.method != 'POST':
+        
+        # nenhum dado submetido; cria um formulário em branco
+        form = EntryForm()
+    else:
+
+        # dados do POST submetidos; processa os dados
+        form = EntryForm(data=request.POST)
+        if form.is_valid():
+            new_entry = form.save(commit=False)
+            new_entry.topic = topic
+            new_entry.save()
+
+            return redirect('learning_logs:topic', topic_id=topic_id)
+
+    # exibir um formulário em branco ou inválido 
+    context = {'topic': topic, 'form': form}
+    return render(request, 'learning_logs/new_entry.html', context)
