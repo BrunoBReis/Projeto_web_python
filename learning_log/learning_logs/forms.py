@@ -27,4 +27,6 @@ class EntryForm(forms.ModelForm):
 
         # espeficando um rótulo vazio de texto
         labels = {'text': ''}
+
+        # criando uma caixa de texto de 80 colunas
         widgets = {'text': forms.Textarea(attrs={'cols': 80})}
