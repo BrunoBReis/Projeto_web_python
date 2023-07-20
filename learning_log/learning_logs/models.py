@@ -11,6 +11,9 @@ class Topic(models.Model):
     # registrará a data e hora 
     date_added = models.DateTimeField(auto_now_add=True)
 
+    # torando o atributo público
+    public = models.fields.BooleanField(default=False)
+
     # relação entre user e cahve estrangeira 
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -31,6 +34,9 @@ class Entry(models.Model):
 
     # não se quer restringir a quantiade de caracter
     text = models.TextField()
+
+    # torando o atributo público
+    public = models.fields.BooleanField(default=False)
 
     # apresenta em ordem que foram criadas e inserem um timestamp junto a cada entrada
     date_added = models.DateTimeField(auto_now_add=True)
